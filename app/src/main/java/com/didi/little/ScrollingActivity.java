@@ -105,6 +105,7 @@ public class ScrollingActivity extends AppCompatActivity {
         }, Utils.getCurtimeHH(), "2030-12-12 18:20");
         timeSelector.show();
     }
+    // 发送短信
     public void SendNumber(View view){
         Intent intsent = new Intent();
         intsent.setAction(Intent.ACTION_SENDTO);
