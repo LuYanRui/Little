@@ -4,21 +4,21 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by ming on 2017/11/10.
- */
 
 public class Utils {
+    // 获取当前时间格式 yyyy-MM-dd
     public static String getCurtime(){
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         String date=sdf.format(new java.util.Date());
         return date;
     }
+    // 获取当前时间格式 yyyy-MM-dd HH:mm
     public static String getCurtimeHH(){
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String date=sdf.format(new java.util.Date());
         return date;
     }
+    // 判断是否超时
     public static boolean isTimeOut(String oldtime){
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         try

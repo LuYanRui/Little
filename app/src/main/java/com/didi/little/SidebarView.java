@@ -12,23 +12,27 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+// 联系人按照字母排序
 public class SidebarView extends View {
+	// 序列表
 	public String[] arrLetters = { "A", "B", "C", "D", "E", "F", "G", "H", "I",
 			"J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
 			"W", "X", "Y", "Z", "#" };
+	// 时间监听
 	private OnLetterClickedListener listener = null;
+	// 提示框
 	private TextView textView_dialog;
+	//判断当前位置
 	private int isChoosedPosition = -1;
-
+    // 设置提示框内容
 	public void setTextView(TextView textView) {
 		textView_dialog = textView;
 	}
-
+    // 构造函数
 	public SidebarView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 	}
-
+    // 相关绘制操作
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
@@ -36,11 +40,11 @@ public class SidebarView extends View {
 		int height = getHeight();
 		int singleTextHeight = height / arrLetters.length;
 
+		// 绘制字母序列表
 		for (int i = 0; i < arrLetters.length; i++) {
 			Paint paint = new Paint();
 			paint.setAntiAlias(true);
 			paint.setTextSize(50);
-			//paint.setTypeface(Typeface.DEFAULT_BOLD);
 			paint.setColor(ContextCompat.getColor(getContext(),R.color.colorAt));
 			if (i == isChoosedPosition) {
 				paint.setColor(Color.WHITE);
@@ -52,7 +56,7 @@ public class SidebarView extends View {
 			paint.reset();
 		}
 	}
-
+    // 当用户触摸滑动时不同状态下dialog的不同显示状态
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		textView_dialog.setBackgroundColor(getResources().getColor(R.color.halftransparent));
@@ -87,11 +91,11 @@ public class SidebarView extends View {
 		}
 		return true;
 	}
-
+    // 事件监听接口
 	public interface OnLetterClickedListener {
 		public void onLetterClicked(String str);
 	}
-
+    // 事件监听
 	public void setOnLetterClickedListener(OnLetterClickedListener listener) {
 		this.listener = listener;
 	}

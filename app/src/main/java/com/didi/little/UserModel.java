@@ -1,18 +1,14 @@
 package com.didi.little;
 
 public class UserModel {
-	private String userface;
+	// 联系人姓名
 	private String uesrname;
+	// 联系人电话
 	private String usernumber;
+	// firstletter
 	private String firstLetter;
 
-	public String getUserface() {
-		return userface;
-	}
-
-	public void setUserface(String userface) {
-		this.userface = userface;
-	}
+	// 对应set get函数
 
 	public String getUesrname() {
 		return uesrname;

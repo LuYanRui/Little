@@ -1,40 +1,20 @@
 package com.didi.little;
-
-import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.support.v4.view.ViewPropertyAnimatorCompat;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.support.v7.app.AppCompatActivity;
-
-import com.nineoldandroids.view.ViewPropertyAnimator;
-
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
+    //首页viewpager
     private ViewPager viewPager;
+    //装载viewpager view
     private ArrayList<View> list_view=new ArrayList<View>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         initCompant();
 
     }
+    // 初始化组件
     private void initCompant(){
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -57,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager.setAdapter(new MainViewPagerAdapter(list_view));
 
+        // 滑动事件监听
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -75,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+    // 退出自动登陆
     public void ExitUser(View view){
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
         builder.setTitle("是否退出 ？");
@@ -96,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         });
         builder.show();
     }
-
+    //viewpager 适配器
     private class MainViewPagerAdapter extends PagerAdapter {
         private ArrayList<View> listview;
         public MainViewPagerAdapter(ArrayList<View> listvie){

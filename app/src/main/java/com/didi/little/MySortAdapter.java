@@ -16,15 +16,17 @@ import android.widget.TextView;
 
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
-
+// 联系人页面自定义适配器
 public class MySortAdapter extends BaseAdapter implements SectionIndexer,Filterable {
 	private List<UserModel> list = null;
 	private Context context = null;
 
+	// 构造函数
 	public MySortAdapter(Context context, List<UserModel> list) {
 		this.context = context;
 		this.list = list;
 	}
+
 
 	@Override
 	public int getCount() {
@@ -44,6 +46,7 @@ public class MySortAdapter extends BaseAdapter implements SectionIndexer,Filtera
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder mHolder = null;
+		// 复用view，每次滑动listview的时候，listview都会重绘
 		if (convertView == null) {
 			mHolder = new ViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.item_listview_main, parent, false);
@@ -53,6 +56,7 @@ public class MySortAdapter extends BaseAdapter implements SectionIndexer,Filtera
 		else {
 			mHolder = (ViewHolder) convertView.getTag();
 		}
+		//自定义view赋值
 		UserModel userModel = list.get(position);
 		mHolder.textView_item_username.setText(userModel.getUesrname());
         mHolder.textView_item_userhead.setText(userModel.getUesrname().substring(0,1));
@@ -68,7 +72,7 @@ public class MySortAdapter extends BaseAdapter implements SectionIndexer,Filtera
 		}
 		return convertView;
 	}
-
+    // 复用的view组件
 	class ViewHolder {
 		@ViewInject(R.id.textView_item_username)
 		private TextView textView_item_username;

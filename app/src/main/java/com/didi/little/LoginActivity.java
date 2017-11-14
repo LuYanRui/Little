@@ -10,12 +10,7 @@ import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
 
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 
 import android.os.Build;
@@ -31,37 +26,22 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity {
 
-    /**
-     * Id to identity READ_CONTACTS permission request.
-     */
+    // 请求读取联系人权限返回值
     private static final int REQUEST_READ_CONTACTS = 0;
-
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
+    // 异步请求
     private UserLoginTask mAuthTask = null;
-
-    // UI references.
+    // 用户名组件
     private AutoCompleteTextView mEmailView;
+    // 密码组件
     private EditText mPasswordView;
+    // 加载进度
     private View mProgressView;
+    // 登陆view
     private View mLoginFormView;
 
     @Override
@@ -69,15 +49,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // 判断是否自动登陆
         if(isAutoLogin()){
             startActivity(new Intent(LoginActivity.this,MainActivity.class));
             finish();
         }else{
-            // Set up the login form.
+            // 设置登陆组件
             mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
             populateAutoComplete();
 
             mPasswordView = (EditText) findViewById(R.id.password);
+
+            // 输入动作监听
             mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -89,6 +72,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             });
 
+            // 输入动作监听
             Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
             mEmailSignInButton.setOnClickListener(new OnClickListener() {
                 @Override
@@ -102,21 +86,25 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
     }
+    // 判断是否自动登陆
     private boolean isAutoLogin(){
         SharedPreferences sharep=getPreferences(Activity.MODE_PRIVATE);
+
+        // 不做自动登陆操作
         if(getIntent().getBooleanExtra("exit",false)){
             SharedPreferences.Editor edit=sharep.edit();
             edit.putString("time","notime");
             edit.apply();
             return false;
         }else {
-
+            //用户点击退出
             if(sharep.getString("time","notime").equals("notime")){
                 SharedPreferences.Editor edit=sharep.edit();
                 edit.putString("time",Utils.getCurtime());
                 edit.apply();
                 return false;
             }else{
+                // 超过自动登陆时间
                 if(Utils.isTimeOut(sharep.getString("time","notime"))){
                     return false;
                 }else{
@@ -126,14 +114,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
     }
+    // 是否获取到权限
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
         }
-
-        getLoaderManager().initLoader(0, null, this);
     }
-
+    // 通过不同的版本判断是否应该动态获取权限，android6.0以上动态获取
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
@@ -141,6 +128,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
             return true;
         }
+        // 提示用户需要开启权限
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
             Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
@@ -156,9 +144,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return false;
     }
 
-    /**
-     * Callback received when a permissions request has been completed.
-     */
+    // 请求权限的返回结果
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -169,37 +155,29 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
+    // 验证登陆
     private void attemptLogin() {
         if (mAuthTask != null) {
             return;
         }
 
-        // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
-        // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        // Check for a valid password, if the user entered one.
-
+        // 判断用户名密码是否为空
         if(TextUtils.isEmpty(password) || TextUtils.isEmpty(email)){
             if (TextUtils.isEmpty(password)) {
                 mPasswordView.setError(getString(R.string.error_field_required));
             }
 
-            // Check for a valid email address.
             if (TextUtils.isEmpty(email)) {
                 mEmailView.setError(getString(R.string.error_field_required));
             }
         }else {
+            // 用户名密码正确执行登陆
             if(email.equals("1234") && password.equals("1234")){
                 showProgress(true);
                 mAuthTask = new UserLoginTask(email, password);
@@ -215,14 +193,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
+    // 显示登陆进度
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
+        // 判断当前sdk版本下ViewPropertyAnimator是否可用
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
@@ -244,70 +218,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             });
         } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
+            // 当前版本下不可用时不显示动画
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
-                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
-
-                // Select only email addresses.
-                ContactsContract.Contacts.Data.MIMETYPE +
-                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
-                .CONTENT_ITEM_TYPE},
-
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
-                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<>();
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-            cursor.moveToNext();
-        }
-
-        addEmailsToAutoComplete(emails);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
-    }
-
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
-    }
-
-
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
-
-        int ADDRESS = 0;
-    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
+    // 异步执行登陆操作，不可在主线程执行耗时操作，否则容易引起anr
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
@@ -320,27 +237,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
             try {
-                // Simulate network access.
+                // 模拟网络延迟
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
             return true;
         }
 
+        // 主线程
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
