@@ -96,6 +96,7 @@ public class ScrollingActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+    // 时间选择
     private void selectTime(){
         TimeSelector timeSelector = new TimeSelector(this, new TimeSelector.ResultHandler() {
             @Override
