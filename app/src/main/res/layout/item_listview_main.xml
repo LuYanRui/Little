@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView_item_firstletter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1.0"
+        android:paddingLeft="15dp"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
+        android:text="A"
+        android:textColor="#454545"
+        android:background="#fff5f5f5" />
+
+    <LinearLayout
+        android:padding="5dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/text_item_userhead"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="8dp"
+            android:text=""
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:background="@drawable/name_head"/>
+
+        <TextView
+            android:id="@+id/textView_item_username"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:text="用户名"
+            android:textSize="17sp"
+            android:textColor="@color/material_grey_600" />
+        <TextView
+            android:id="@+id/textView_item_number"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+</LinearLayout>
